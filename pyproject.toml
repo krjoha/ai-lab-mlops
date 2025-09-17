@@ -1,0 +1,13 @@
+[project]
+name = "ai-lab-mlops"
+version = "0.1.0"
+description = "Simple MLOps pipeline demo"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas",
+    "scikit-learn",
+    "joblib",
+    "mlflow>=3.0.0",
+    "apache-airflow>=3.0.0"
+]
