@@ -56,7 +56,27 @@ An Airflow-based MLOps pipeline with MLflow integration for experiment tracking,
 
 ## Quick Start
 
-Install dependencies
+Install `uv` (Python environment manager) by following [these instructions](https://docs.astral.sh/uv/getting-started/installation/)
+
+### Windows
+
+If you use windows you can run MLFlow and each python script by itself. You will not be able to run Airflow unless you use WSL to get a linux shell.
+
+```PowerShell
+uv sync
+.venv\Scripts\Activate.ps1
+.\start_mlflow.ps1
+
+# In a seperate terminal:
+python .\tasks\train_model.py
+python .\tasks\generate_data.py
+python .\tasks\batch_predict.py
+python .\tasks\monitor_model.py
+```
+
+### Linux / MacOS
+
+Install dependencies:
 
 ```bash
 uv sync
@@ -70,6 +90,7 @@ Start MLflow server (separate terminal). MLflow UI: http://localhost:5000
 ```
 
 Start Airflow server (separate terminal). Airflow UI: http://localhost:8080
+
 ```bash
 ./start_airflow.sh
 ``` 
@@ -80,4 +101,4 @@ Run model training:
 python tasks/train_model.py
 ```
 
-Run prediction pipeline in the airflow UI!
+Run the pipeline in the Airflow UI!
