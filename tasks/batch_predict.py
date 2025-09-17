@@ -4,7 +4,6 @@ Batch prediction task with MLflow integration.
 Loads model from MLflow registry and logs prediction results for monitoring.
 """
 import pandas as pd
-import joblib
 from pathlib import Path
 import json
 from datetime import datetime
@@ -47,15 +46,7 @@ def batch_predict():
         model = mlflow.sklearn.load_model(model_uri)
 
     except Exception as e:
-        print(f"Failed to load model from MLflow registry: {e}")
-        # Fallback to local model
-        local_model_path = Path("./artifacts/model/sentiment_model.pkl")
-        if local_model_path.exists():
-            print(f"Falling back to local model: {local_model_path}")
-            model = joblib.load(local_model_path)
-            model_version = "local"
-        else:
-            raise FileNotFoundError("No model found in MLflow registry or locally. Run train_model task first.")
+        raise RuntimeError(f"Failed to load model from MLflow registry: {e}. Ensure the model is registered and MLflow server is running.")
 
     # Start MLflow run for batch prediction monitoring
     experiment_name = "batch_predictions"

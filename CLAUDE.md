@@ -22,21 +22,35 @@ The pipeline consists of Python tasks that can run standalone or within Airflow:
 
 ### Environment Setup
 
-Use virtual environment:
-
+**Linux/Mac:**
 ```bash
 # Install dependencies
 uv sync
 source .venv/bin/activate
 ```
 
+**Windows (PowerShell):**
+```powershell
+# Install dependencies
+uv sync
+.venv\Scripts\Activate.ps1
+```
+
 ### MLflow Server
 
 Let the user run the server, dont run it yourself
 
+**Linux/Mac:**
 ```bash
 # Start MLflow tracking server (required for all tasks)
 ./start_mlflow.sh
+# UI available at http://localhost:5000
+```
+
+**Windows (PowerShell):**
+```powershell
+# Start MLflow tracking server (required for all tasks)
+.\start_mlflow.ps1
 # UI available at http://localhost:5000
 ```
 
@@ -44,9 +58,17 @@ Let the user run the server, dont run it yourself
 
 Let the user run the server, dont run it yourself
 
+**Linux/Mac:**
 ```bash
 # Start Airflow (AIRFLOW_HOME: ./airflow, DAGs: ./dags)
 ./start_airflow.sh
+# UI available at http://localhost:8080
+```
+
+**Windows (PowerShell):**
+```powershell
+# Start Airflow (AIRFLOW_HOME: ./airflow, DAGs: ./dags)
+.\start_airflow.ps1
 # UI available at http://localhost:8080
 ```
 

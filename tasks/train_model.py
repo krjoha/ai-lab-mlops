@@ -4,7 +4,6 @@ Model training task with MLflow integration.
 Can be run standalone or as part of Airflow DAG.
 """
 import pandas as pd
-import joblib
 from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
@@ -114,10 +113,6 @@ def train_model():
 
         print(f"Model registered in MLflow as {model_name} version {model_version}")
 
-        # Also save locally as backup
-        model_path = model_dir / "sentiment_model.pkl"
-        joblib.dump(pipeline, model_path)
-
         # Save metadata with MLflow info
         metadata = {
             "model_type": "MultinomialNB with TfidfVectorizer",
@@ -126,7 +121,6 @@ def train_model():
             "training_accuracy": float(train_score),
             "cv_accuracy": float(cv_scores.mean()),
             "classes": pipeline.classes_.tolist(),
-            "model_path": str(model_path),
             "mlflow_experiment_id": str(experiment_id),
             "mlflow_run_id": run.info.run_id,
             "mlflow_model_name": model_name,
@@ -140,7 +134,6 @@ def train_model():
 
         mlflow.log_artifact(str(metadata_path))
 
-        print(f"Model saved locally to {model_path}")
         print(f"Model registered in MLflow registry: {model_name}:v{model_version}")
         print(f"MLflow run ID: {run.info.run_id}")
         print("Model training task completed successfully")
