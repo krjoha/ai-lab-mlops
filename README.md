@@ -91,16 +91,16 @@ bash start_mlflow.sh
 
 Start Airflow server (separate terminal). Airflow UI: http://localhost:8080
 
-You can find the user name and password printed in the beginning of the log entries/terminal, or the file `airflow/simple_auth_manager_passwords.json.generated`
-
 ```bash
 bash start_airflow.sh
 ``` 
+
+Afterwards, you can find the username and password printed in the beginning of the log entries/terminal, or the file `airflow/simple_auth_manager_passwords.json.generated`
 
 Run model training:
 
 ```bash
 python tasks/train_model.py
 ```
-
+You can see the stored and versioned model in [the MLFlow UI](http://localhost:5000/#/experiments)
 After creating a model and storing it in the MLFlow registry you can then go to [your local Airflow UI](http://localhost:8080) and run the prediction DAG / pipeline from there!
