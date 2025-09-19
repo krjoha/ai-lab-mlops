@@ -91,7 +91,7 @@ bash start_mlflow.sh
 
 Start Airflow server (separate terminal). Airflow UI: http://localhost:8080
 
-You can find the user name and password printed in the beginning of the log entries/terminal.
+You can find the user name and password printed in the beginning of the log entries/terminal, or the file `airflow/simple_auth_manager_passwords.json.generated`
 
 ```bash
 bash start_airflow.sh
