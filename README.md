@@ -60,7 +60,7 @@ Install `uv` (Python environment manager) by following [these instructions](http
 
 ### Windows
 
-If you use windows you can run MLFlow and each python script by itself. You will not be able to run Airflow unless you use WSL to get a linux shell.
+If you use Windows and Powershell you can run MLFlow and each python script by itself. You will not be able to run Airflow unless you use WSL to get a linux shell.
 
 ```PowerShell
 uv sync
@@ -74,7 +74,7 @@ python .\tasks\batch_predict.py
 python .\tasks\monitor_model.py
 ```
 
-### Linux / MacOS
+### Linux / MacOS / WSL
 
 Install dependencies:
 
@@ -86,13 +86,15 @@ source .venv/bin/activate
 Start MLflow server (separate terminal). MLflow UI: http://localhost:5000
 
 ```bash
-./start_mlflow.sh
+bash start_mlflow.sh
 ```
 
 Start Airflow server (separate terminal). Airflow UI: http://localhost:8080
 
+You can find the user name and password printed in the beginning of the log entries/terminal.
+
 ```bash
-./start_airflow.sh
+bash start_airflow.sh
 ``` 
 
 Run model training:
@@ -101,4 +103,4 @@ Run model training:
 python tasks/train_model.py
 ```
 
-Run the pipeline in the Airflow UI!
+After creating a model and storing it in the MLFlow registry you can then go to [your local Airflow UI](http://localhost:8080) and run the prediction DAG / pipeline from there!
