@@ -16,23 +16,24 @@ def generate_data():
     data_dir = Path("./artifacts/data")
     data_dir.mkdir(parents=True, exist_ok=True)
 
-    # Sample data to predict (simulates new incoming data)
-    new_data = [
-        "this product is absolutely fantastic",
-        "really poor quality, very disappointed",
-        "good value for money, happy with purchase",
-        "disappointing results, not worth it",
-        "amazing service and fast delivery",
-        "terrible customer support experience",
-        "excellent quality, highly recommend",
-        "worst purchase ever made",
-        "great experience overall",
-        "completely unsatisfied with this"
-    ]
+    # Load batch prediction samples and sample deterministically from them
+    samples_path = data_dir / "batch_prediction_samples.csv"
+    if not samples_path.exists():
+        raise FileNotFoundError(f"Batch prediction samples not found at {samples_path}. Please ensure the sample CSV file exists.")
 
-    # Create DataFrame
+    print(f"Loading samples from {samples_path}")
+    samples_df = pd.read_csv(samples_path)
+
+    # Sample randomly (different results each run for varied Airflow outputs)
+    # Take a subset of the samples to simulate new incoming data
+    import numpy as np
+    sample_size = min(20, len(samples_df))  # Sample exactly 20 items or all if fewer
+    sampled_indices = np.random.choice(len(samples_df), size=sample_size, replace=False)
+    sampled_data = samples_df.iloc[sampled_indices]
+
+    # Create DataFrame with additional metadata
     df = pd.DataFrame({
-        'text': new_data,
+        'text': sampled_data['text'].values,
         'created_at': datetime.now().isoformat(),
         'batch_id': f"batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     })

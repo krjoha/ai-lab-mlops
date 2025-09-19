@@ -6,7 +6,7 @@ Can be run standalone or as part of Airflow DAG.
 import pandas as pd
 from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_val_score
 import json
@@ -40,34 +40,33 @@ def train_model():
     model_dir = Path("./artifacts/model")
     model_dir.mkdir(parents=True, exist_ok=True)
 
-    # Simple training data
-    data = [
-        ("great product, love it", "positive"),
-        ("amazing quality", "positive"),
-        ("excellent service", "positive"),
-        ("wonderful experience", "positive"),
-        ("fantastic results", "positive"),
-        ("terrible experience", "negative"),
-        ("very bad quality", "negative"),
-        ("awful service", "negative"),
-        ("disappointing results", "negative"),
-        ("poor performance", "negative"),
-    ]
+    # Load training data from CSV file
+    training_data_path = Path("./artifacts/data/training_data.csv")
+    if not training_data_path.exists():
+        raise FileNotFoundError(f"Training data not found at {training_data_path}. Please ensure the training data CSV file exists.")
 
-    df = pd.DataFrame(data, columns=['text', 'sentiment'])
+    print(f"Loading training data from {training_data_path}")
+    df = pd.read_csv(training_data_path)
     print(f"Training with {len(df)} samples")
 
-    # Create pipeline
+    # Create pipeline with enhanced TF-IDF and LogisticRegression
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(max_features=100)),
-        ('classifier', MultinomialNB())
+        ('tfidf', TfidfVectorizer(
+            max_features=1500,
+            ngram_range=(1, 2),
+            lowercase=True,
+            stop_words='english'
+        )),
+        ('classifier', LogisticRegression(random_state=42, max_iter=1000))
     ])
 
     # Start MLflow run
     with mlflow.start_run(experiment_id=experiment_id) as run:
         # Log parameters
-        mlflow.log_param("model_type", "MultinomialNB")
-        mlflow.log_param("vectorizer_max_features", 100)
+        mlflow.log_param("model_type", "LogisticRegression")
+        mlflow.log_param("vectorizer_max_features", 1500)
+        mlflow.log_param("vectorizer_ngram_range", "(1, 2)")
+        mlflow.log_param("vectorizer_stop_words", "english")
         mlflow.log_param("training_samples", len(df))
 
         # Train model
@@ -115,7 +114,7 @@ def train_model():
 
         # Save metadata with MLflow info
         metadata = {
-            "model_type": "MultinomialNB with TfidfVectorizer",
+            "model_type": "LogisticRegression with TfidfVectorizer",
             "training_date": datetime.now().isoformat(),
             "training_samples": len(df),
             "training_accuracy": float(train_score),
