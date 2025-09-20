@@ -41,6 +41,7 @@ with DAG(
     description='Simple MLOps Pipeline Demo',
     schedule='@daily',  # Run once per day at midnight
     catchup=True,
+    max_active_runs=1,
     tags=['mlops', 'demo', 'ml'],
 ) as dag:
 
